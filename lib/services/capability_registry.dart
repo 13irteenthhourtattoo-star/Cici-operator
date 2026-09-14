@@ -43,6 +43,53 @@ class CapabilityRegistry {
         parameters: [],
       ),
     );
+    _actions.add(
+      const AssistantAction(
+        sourceType: AssistantActionSourceType.oacp,
+        sourceId: 'cici.operator',
+        actionId: 'send_to_cici',
+        displayName: 'Send to Cici',
+        description:
+            'Send a spoken conversational message to Cici in ChatGPT.',
+        confirmationMessage: 'Sending to Cici',
+        domain: 'chat',
+        appDomains: ['assistant', 'chat'],
+        appKeywords: ['cici', 'chatgpt', 'message'],
+        appAliases: ['Cici', 'ChatGPT'],
+        aliases: [
+          'tell cici',
+          'ask cici',
+          'message cici',
+          'send message to cici',
+          'send message to chatgpt',
+        ],
+        examples: [
+          'Tell Cici banana',
+          'Ask Cici what time it is',
+          'Send message to ChatGPT hello',
+        ],
+        keywords: ['tell cici', 'ask cici', 'message cici', 'send message'],
+        disambiguationHints: [
+          'Use this when the user wants to say or send something to Cici, not merely open ChatGPT.',
+        ],
+        dispatchType: AssistantActionDispatchType.broadcast,
+        androidAction: 'com.cicibridge.SEND_TO_CICI',
+        packageName: 'com.cicibridge',
+        extrasMapping: {},
+        parameters: [
+          AssistantActionParameter(
+            name: 'message',
+            type: 'string',
+            required: true,
+            description: 'The exact conversational message to send to Cici.',
+            extractionHint:
+                'Extract only what the user wants Cici to receive. For "Tell Cici banana", return "banana".',
+            examples: ['banana', 'what time is it', 'hello'],
+          ),
+        ],
+      ),
+    );
+
     final discoveredApps = await _safeDiscoverApps();
 
     for (final discoveredApp in discoveredApps) {
