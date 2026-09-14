@@ -1,5 +1,6 @@
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/foundation.dart';
+import 'package:installed_apps/installed_apps.dart';
 import 'dart:developer' as developer;
 
 import '../models/assistant_action.dart';
@@ -41,6 +42,31 @@ class IntentDispatcher {
     }
 
     final requestId = _generateRequestId();
+
+    // Cici Operator built-in app launcher.
+    if (actionDefinition.sourceId == 'cici.operator' &&
+        actionDefinition.actionId == 'open_chatgpt') {
+      try {
+        final packageName = actionDefinition.packageName;
+        if (packageName == null || packageName.isEmpty) {
+          return const DispatchResult(success: false);
+        }
+
+        final launched = await InstalledApps.startApp(packageName);
+        return DispatchResult(
+          success: launched == true,
+          requestId: launched == true ? requestId : null,
+        );
+      } catch (e) {
+        developer.log(
+          'Error launching Cici Operator app',
+          name: 'IntentDispatcher',
+          error: e,
+        );
+        return const DispatchResult(success: false);
+      }
+    }
+
     final arguments = Map<String, dynamic>.from(
       _buildArguments(actionDefinition, action.parameters),
     );
