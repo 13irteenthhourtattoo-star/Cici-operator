@@ -16,7 +16,33 @@ class CapabilityRegistry {
 
   Future<void> initialize() async {
     _actions.clear();
-
+    _actions.add(
+      const AssistantAction(
+        sourceType: AssistantActionSourceType.oacp,
+        sourceId: 'cici.operator',
+        actionId: 'open_chatgpt',
+        displayName: 'Open ChatGPT',
+        description: 'Open the ChatGPT app',
+        confirmationMessage: 'Opening ChatGPT',
+        domain: 'apps',
+        appDomains: ['assistant', 'chat'],
+        appKeywords: ['chatgpt', 'cici', 'openai'],
+        appAliases: ['ChatGPT', 'Cici'],
+        aliases: ['open chatgpt', 'launch chatgpt', 'start chatgpt'],
+        examples: [
+          'Open ChatGPT',
+          'Launch ChatGPT',
+          'Start ChatGPT',
+        ],
+        keywords: ['open', 'launch', 'chatgpt', 'cici'],
+        disambiguationHints: [],
+        dispatchType: AssistantActionDispatchType.activity,
+        androidAction: 'android.intent.action.MAIN',
+        packageName: 'com.openai.chatgpt',
+        extrasMapping: {},
+        parameters: [],
+      ),
+    );
     final discoveredApps = await _safeDiscoverApps();
 
     for (final discoveredApp in discoveredApps) {
